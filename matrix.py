@@ -88,7 +88,7 @@ class Matrix(object):
         funcs = {Matrix: matrix,
                  int: number,
                  float: number}
-        funcs[type(array_or_number)](array_or_number)
+        return funcs[type(array_or_number)](array_or_number)
 
     # Віднімання
     def __sub__(self, array_or_number):
@@ -121,7 +121,7 @@ class Matrix(object):
         funcs = {Matrix: matrix,
                  int: number,
                  float: number}
-        funcs[type(array_or_number)](array_or_number)
+        return funcs[type(array_or_number)](array_or_number)
 
     def __mul__(self, array_or_number):
         def number(number_):
@@ -130,7 +130,7 @@ class Matrix(object):
                 for num in row:
                     row.replace(num, num * number_, from_end=True)
 
-            return ls
+            return Matrix(ls)
 
         def matrix(matrix_):
 
@@ -144,7 +144,7 @@ class Matrix(object):
         funcs = {Matrix: matrix,
                  int: number,
                  float: number}
-        funcs[type(array_or_number)](array_or_number)
+        return funcs[type(array_or_number)](array_or_number)
 
     def __truediv__(self, array_or_number):
         def number(number_):
@@ -152,7 +152,7 @@ class Matrix(object):
             for row in ls:
                 for num in row:
                     row.replace(num, num / number_, from_end=True)
-            return ls
+            return Matrix(ls)
 
         def matrix(matrix_):
             print(matrix_)
@@ -160,7 +160,7 @@ class Matrix(object):
         funcs = {Matrix: matrix,
                  int: number,
                  float: number}
-        funcs[type(array_or_number)](array_or_number)
+        return funcs[type(array_or_number)](array_or_number)
 
     def __str__(self):
 
