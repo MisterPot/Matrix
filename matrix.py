@@ -60,9 +60,12 @@ class Matrix(object):
     # Додавання
     def __add__(self, array_or_number):
         def number(number_):
-            for row in self.array:
+            ls = deepcopy(self.array)
+            for row in ls:
                 for num in row:
                     row.replace(num, num + number_, from_end=True)
+
+            return Matrix(ls)
 
         def matrix(matrix_: Matrix):
             if self.rows != matrix_.rows:
@@ -80,7 +83,7 @@ class Matrix(object):
                     for number1, number2 in zip(row1, row2):
                         res_row.append(number1 + number2)
 
-                self.array = result
+                return Matrix(result)
 
         funcs = {Matrix: matrix,
                  int: number,
@@ -90,9 +93,12 @@ class Matrix(object):
     # Віднімання
     def __sub__(self, array_or_number):
         def number(number_):
-            for row in self.array:
+            ls = deepcopy(self.array)
+            for row in ls:
                 for num in row:
                     row.replace(num, num - number_, from_end=True)
+
+            return Matrix(ls)
 
         def matrix(matrix_):
             if self.rows != matrix_.rows:
@@ -119,9 +125,12 @@ class Matrix(object):
 
     def __mul__(self, array_or_number):
         def number(number_):
-            for row in self.array:
+            ls = deepcopy(self.array)
+            for row in ls:
                 for num in row:
                     row.replace(num, num * number_, from_end=True)
+
+            return ls
 
         def matrix(matrix_):
 
@@ -139,9 +148,11 @@ class Matrix(object):
 
     def __truediv__(self, array_or_number):
         def number(number_):
-            for row in self.array:
+            ls = deepcopy(self.array)
+            for row in ls:
                 for num in row:
                     row.replace(num, num / number_, from_end=True)
+            return ls
 
         def matrix(matrix_):
             print(matrix_)
@@ -151,7 +162,7 @@ class Matrix(object):
                  float: number}
         funcs[type(array_or_number)](array_or_number)
 
-    def __repr__(self):
+    def __str__(self):
 
         arr = deepcopy(self.array)
         for row in arr:
@@ -167,3 +178,6 @@ class Matrix(object):
             f += f'\n{row.__repr__()}'
         f += '\n'
         return f
+
+    def __repr__(self):
+        return f"<Matrix object>"
