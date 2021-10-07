@@ -28,6 +28,7 @@ Simple variation matrix in Python.
   ```
 
 ##Other mathematical operations with matrix
+
   Supported all simple mathematical operations related with numbers
   ( +, - , / , * ).
 
@@ -57,6 +58,7 @@ Simple variation matrix in Python.
   ```
 
 ##Matrix methods
+
   | Method | Args | What its do |
   |:-----------:|:-------:|:--------:|
   |`Matrix.transpone`| `self` | just transpone matrix |
