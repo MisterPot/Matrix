@@ -1,14 +1,13 @@
-#Matrix
+# Matrix
 
 Simple variation matrix in Python.
 * Instalation
     
     git clone https://github.com/MisterPot/Matrix.git
-    
-    pip install Matrix
 
 
 * Simple usage
+
     
     from matrix import Matrix
   
