@@ -72,3 +72,24 @@ Simple variation matrix in Python.
   #[2,4,6]
   #
   ```
+
+  | Method | Args | What its do |
+  |:-----------:|:-------:|:--------:|
+  |`Matrix.__getitem__`| `float` | may get row, column and number |
+  |`Matrix.__setitem__`| `float` | replace existing number|
+
+  ```python
+  print(mat[1.1])
+  #1
+  print(mat[0.1])
+  #[1, 3, 5]
+  print(mat[1.0])
+  #[1, 2]
+  mat[2.2] = 2
+  print(mat)
+  #
+  #[1,2]
+  #[3,2]
+  #[5,6]
+  # 
+  ```

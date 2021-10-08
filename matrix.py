@@ -30,6 +30,23 @@ class Matrix(object):
         if 'columns' in self.__dict__:
             self.__refresh()
 
+    def __setitem__(self, float_, value):
+        row, column = map(int, str(float_).split('.'))
+        self.array[row - 1][column - 1] = value
+
+    def __getitem__(self, float_):
+        row, column = map(int, str(float_).split('.'))
+        if column == 0:
+            return self.array[row - 1]
+        elif row == 0:
+            self.transpone()
+            ar = deepcopy(self.array)
+            self.transpone()
+            return ar[column - 1]
+
+        else:
+            return self.array[row - 1][column - 1]
+
     def __set(self, key, value):
         object.__setattr__(self, key, value)
 
