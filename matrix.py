@@ -1,6 +1,6 @@
 from fractions import Fraction
 from copy import deepcopy
-from ls import list
+from ls import list, ir
 
 
 class Exceptions:
@@ -15,6 +15,10 @@ class Exceptions:
     class NotAdded(Exception):
         def __str__(self):
             return "Can't add the matrix or number to this matrix"
+
+    class ZeroMinore(Exception):
+        def __str__(self):
+            return "Minore index can't equal 0"
 
 
 class Matrix(object):
@@ -196,5 +200,38 @@ class Matrix(object):
         f += '\n'
         return f
 
+    def __restring(self, float_):
+        row, column = str(float_).split('.')
+        return int(row), int(column)
+
     def __repr__(self):
         return f"<Matrix object>"
+
+    def minore(self, float_):
+        if 0 in self.__restring(float_):
+            raise Exceptions.ZeroMinore
+
+        mat = deepcopy(self)
+        row, column = self.__restring(float_)
+        mat.transpone()
+        mat.array.pop(column - 1)
+        mat.transpone()
+        mat.array.pop(row - 1)
+        return mat
+
+    def algebrig(self, float_):
+        row, column = self.__restring(float_)
+        mat = self.minore(float_)
+        power = row + column
+        return mat * (-1) ** power
+
+    def determinant(self):
+        def st(one, two):
+            return f'{one}.{two}'
+
+        ls = [[2, 2], [3, 3]]
+        if [self.rows, self.columns] == ls[0]:
+            return self[1.1] * self[2.2] - self[1.2] * self[2.1]
+
+        if [self.rows, self.columns] == ls[1]:
+            pass
