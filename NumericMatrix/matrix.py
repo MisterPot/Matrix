@@ -4,6 +4,7 @@ import itertools
 from copy import deepcopy
 import math
 from .exceptions import Exceptions
+from .utils import use_mode
 from fractions import Fraction
 import operator
 from functools import reduce
@@ -11,19 +12,26 @@ from functools import reduce
 
 class NumericMatrix(object):
 
-    def __init__(self, array: list):
+    def __init__(self, array: list, *args, **kwargs):
         self.__cache = {}
         self.array = [*array]
         self.rows = [*array]
         self.columns = self.__get_cols()
+        self.displayMode = False
 
     def __getitem__(self, float_):
         row, col = str(float_).split('.')
         return self.array[int(row) - 1][int(col) - 1]
 
+    @use_mode()
     def __setitem__(self, float_, value):
         row, col = str(float_).split('.')
         self.array[int(row) - 1][int(col) - 1] = value
+
+    def __with_mode(self, expressions, mode='+'):
+        if self.displayMode:
+            return f' {mode} '.join(expressions)
+        return eval(f' {mode} '.join(expressions))
 
     '''
         For permutation of the row on cols
@@ -71,7 +79,7 @@ class NumericMatrix(object):
     '''
     def __add__(self, other: NumericMatrix) -> NumericMatrix:
         self.check_rc(other)
-        return NumericMatrix([[x + y for x, y in zip(selfRow, otherRow)]
+        return NumericMatrix([[self.__with_mode([f'{x} + {y}']) for x, y in zip(selfRow, otherRow)]
                               for selfRow, otherRow in zip(self.rows, other.rows)])
 
     '''
@@ -79,7 +87,7 @@ class NumericMatrix(object):
     '''
     def __sub__(self, other: NumericMatrix) -> NumericMatrix:
         self.check_rc(other)
-        return NumericMatrix([[x - y for x, y in zip(selfRow, otherRow)]
+        return NumericMatrix([[self.__with_mode([f'{x} - {y}']) for x, y in zip(selfRow, otherRow)]
                               for selfRow, otherRow in zip(self.rows, other.rows)])
 
     '''
@@ -88,11 +96,11 @@ class NumericMatrix(object):
     def __mul__(self, other: Union[NumericMatrix, int, float]) -> NumericMatrix:
 
         if type(other) in [int, float]:
-            return NumericMatrix([[x * other for x in row] for row in self.rows])
+            return NumericMatrix([[self.__with_mode([f'{x} * {other}']) for x in row] for row in self.rows])
 
         self.check_mt(other)
         return NumericMatrix([
-            [sum([x * y for x, y in [*itertools.zip_longest(selfRow, otherColumn)]]) for otherColumn in other.columns]
+            [self.__with_mode([f'{x} * {y}' for x, y in [*itertools.zip_longest(selfRow, otherColumn)]]) for otherColumn in other.columns]
             for selfRow in self.rows])
 
     '''
@@ -101,7 +109,7 @@ class NumericMatrix(object):
     def __truediv__(self, other: Union[NumericMatrix, int, float]) -> NumericMatrix:
 
         if type(other) in [int, float]:
-            return NumericMatrix([[x / other for x in row] for row in self.rows])
+            return NumericMatrix([[self.__with_mode([f'{x} / {other}']) for x in row] for row in self.rows])
 
         self.check_mt(other)
         return self * other.invert()
@@ -109,6 +117,7 @@ class NumericMatrix(object):
     '''
         Invert current matrix
     '''
+    @use_mode()
     def invert(self):
         tr = self.transpone()
         return NumericMatrix([
@@ -128,7 +137,9 @@ class NumericMatrix(object):
     '''
         Determinant of current matrix
     '''
+
     @property
+    @use_mode()
     def determinant(self) -> Union[int, float]:
         if len(self.rows) != len(self.columns):
             raise Exceptions.NoDeterminant
@@ -155,6 +166,8 @@ class NumericMatrix(object):
     '''
         Same as minore, but multiplication (-1) in power col + row
     '''
+
+    @use_mode()
     def algebraic(self, rowCord: int, colCord: int) -> Union[int, float]:
         return int(math.pow(-1, (rowCord + colCord))) * self.minore(rowCord, colCord)
 
@@ -162,6 +175,8 @@ class NumericMatrix(object):
         Find a minore of
         current row and column current for matrix
     '''
+
+    @use_mode()
     def minore(self, rowCord: int, colCord: int) -> Union[int, float]:
         rows = deepcopy(self.rows)
         rows.pop(rowCord - 1)
